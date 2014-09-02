@@ -1,0 +1,48 @@
+Objects
+-------
+- Sample (from a sensor)
+	- Definition: A snapshot in time of all the attributes of a particular sensor.
+	
+	- Attributes (e.g. from a soloShot sensor on the arm unit)
+	 	- Sensor_type = solo_shot
+		- Raw_timestamp
+		- Normalized_timestamp
+		- Lat
+		- Long
+		- Alt
+		- Acceleration
+		- tag_id
+		- recording
+		
+	- Methods
+
+- SampleSet
+  - Definition: group of contiguous samples from one or more Sensors
+  - Attributes
+  	- samples
+  
+  - Methods
+  	- get_samples_in_time_range
+	- get_time_ranges_where sensor=solo and recording=on
+  	- get_solo_video_assets
+		- Pulls SampleSets from a SampleSet where recording = on.
+	- get_samples_from_sensor(woo)
+
+Example:
+	
+	- meta_assets = (Array sampleSets) complete_sampleset.video_assets
+	- sani_jump_clips = complete_sampleset.video_assets.tag(sani).jumps
+	
+- VideoAsset
+  - Definition: Subclass of SampleSet. All the samples from all sensors where recording on a VideoTypeSensor is on.
+  - Attributes
+  	- Video_file
+ 	- SampleSet  
+  
+- Clip
+  - Subclass of Asset that references an asset
+   
+
+
+
+

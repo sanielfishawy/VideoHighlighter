@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE fcpxml>
+
+<fcpxml version="1.4">
+    <resources>
+        <format id="r1" name="FFVideoFormat1080p5994" frameDuration="1001/60000s" width="1920" height="1080"/>
+        <asset id="r2" name="Clip #13" uid="6DCE55EEB430006FDCB2BF0F9597372D" src="file:///Volumes/Seagate%20Slim/August%2030%20SoloShot%20with%20Jason%20and%20Chris.fcpbundle/VG-30/Original%20Media/Clip%20%2313.mov" start="0s" duration="556936380/180000s" hasVideo="1" format="r1" hasAudio="1" audioSources="1" audioChannels="2" audioRate="48000">
+            <metadata>
+                <md key="com.apple.proapps.mio.cameraName" value="NO NAME"/>
+                <md key="com.apple.proapps.spotlight.kMDItemCodecs">
+                    <array>
+                        <string>H.264</string>
+                        <string>Linear PCM</string>
+                    </array>
+                </md>
+                <md key="com.apple.proapps.mio.ingestDate" value="2014-08-30 19:49:35 -0700"/>
+            </metadata>
+        </asset>
+    </resources>
+    <library location="file:///Volumes/Seagate%20Slim/August%2030%20SoloShot%20with%20Jason%20and%20Chris.fcpbundle/">
+        <event name="8-30-14 2" uid="02FBBDD8-3B7C-49F3-B7E8-4D05EB87E59E">
+            <project name="5. SoloShot From Excel" >
+                <sequence duration="4528524/180000s" format="r1" tcStart="0s" tcFormat="DF" audioLayout="stereo" audioRate="48k">
+                    <spine>
+                        <clip name="Clip #13" offset="0s" duration="900900/180000s" start="228319020/180000s" tcFormat="DF">
+                            <video offset="0s" ref="r2" duration="556936380/180000s"/>
+                        </clip>
+                        <clip name="Clip #13" offset="900900/180000s" duration="900900/180000s" start="234758160/180000s" tcFormat="DF">
+                            <video offset="0s" ref="r2" duration="556936380/180000s"/>
+                        </clip>
+                        <clip name="Clip #13" offset="1801800/180000s" duration="900900/180000s" start="276448140/180000s" tcFormat="DF">
+                            <video offset="0s" ref="r2" duration="556936380/180000s"/>
+                        </clip>
+                        <clip name="Clip #13" offset="2702700/180000s" duration="900900/180000s" start="480310740/180000s" tcFormat="DF">
+                            <video offset="0s" ref="r2" duration="556936380/180000s"/>
+                        </clip>
+                        <clip name="Clip #13" offset="3603600/180000s" duration="900900/180000s" start="543445380/180000s" tcFormat="DF">
+                            <video offset="0s" ref="r2" duration="556936380/180000s"/>
+                        </clip>
+                    </spine>
+                </sequence>
+            </project>
+        </event>
+    </library>
+</fcpxml>
