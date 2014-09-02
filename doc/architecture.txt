@@ -42,6 +42,8 @@ Example:
 - Clip
   - Subclass of Asset that references an asset
    
+   
+   Some text
 
 
 
