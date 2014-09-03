@@ -4,6 +4,8 @@ puts "#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}"
 module Highlighter
   
   require_relative './filters'
+  require 'pp'
+  
   require "csv"
   
   # ===========
@@ -49,7 +51,7 @@ module Highlighter
   # = Sample =
   # ==========
   class Sample
-    attr_accessor :sensor, :normalized_time_stamp, :data
+    attr_accessor :sensor, :time_stamp, :data
     
     def initialize(sensor=Sensor, data={})
       @sensor = sensor
@@ -58,7 +60,7 @@ module Highlighter
         raise "Parameter #{p} missing from data #{data.inspect}" unless data[p]
         @data[p] = data[p]
       end
-      @normalized_time_stamp = @sensor.normalized_time_stamp(data)
+      @time_stamp = @sensor.normalized_time_stamp(data)
     end
   end
   
@@ -85,7 +87,10 @@ module Highlighter
     
     def add_samples(sample)
       @samples += Array sample
+      @samples.sort!{|a,b| a.time_stamp <=> b.time_stamp}
+      self
     end
+    
   end
   
   # ============
@@ -124,11 +129,11 @@ module Highlighter
 end
 
 include Highlighter
-complete_sample_set = SampleSet.new([SoloShotSensor, WooSensor])
-Importer.new(SoloShotSensor, "/Users/sani/dev/soloshot/data/input/solo.csv", complete_sample_set).import
-assets = complete_sample_set.split_on_recording
+ss = SampleSet.new([SoloShotSensor, WooSensor]);
+Importer.new(SoloShotSensor, "../data/input/solo.csv", ss).import
+assets = ss.split_on_recording
 assets.each{|a| puts a.samples.length}
 kon_footage = assets.last.tagged(100)
-puts kon_footage.length
+puts kon_footage.samples.length
 
 

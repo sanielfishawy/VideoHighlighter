@@ -9,7 +9,7 @@ module Filters
     end
     
     def where(key, value)
-      SampleSet.new_like(self).add_samples @samples.select{|s| s.data[key] == value}
+      SampleSet.new_like(self).add_samples(@samples.select{|s| s.data[key] == value})
     end
     
     def where_including_other_sensors(sensor, key, value)

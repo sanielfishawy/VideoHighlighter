@@ -46,5 +46,12 @@ Example:
    Some text
 
 
+- Kon homework
+  - Create a method all all the people tagged in a sampleset and the number of samples they each have.
+  - Create a method that splits a sampleset on jumps
+    - Find local maxima
+	- Split on samples
+	- Make sure you always include data from other sensors that is coincident so you can filter on that after.
+  - 
 
 

@@ -1,0 +1,21 @@
+rvm
+.rvmrc
+
+- Kon homework
+  - Create a method that gives the bounds for a sampleset
+  - Create a method that gives the length of a sampleset
+  - Create a method all all the people tagged in a sampleset and the number of samples they each have.
+  - Create a method that splits a sampleset on jumps into multiple sample sets
+    - Find local maxima
+	- Split on samples
+	- Make sure you always include data from other sensors that is coincident so you can filter on that after.
+  - Create a class for taking an asset (sample set) and a set of clips (other samplesets) in that asset and spitting out an xml for FinalCut
+  - Complete the structure for woo data
+    - Get to the point where you can do something like:
+	  ss = SampleSet.new([SoloShotSensor, WooSensor]);
+	  Importer.new(SoloShotSensor, "./solo.csv", ss).import
+	  Importer.new(WooSensor, "./woo.csv", ss).import
+	  assets = ss.split_on_recording
+	  kon_footage = assets.last.tagged(kon)
+	  kon_woo_jumps = kon_footage.woo_jumps
+	  xml = XmlExporter.new(kon_footage, kon_woo_jumps)
