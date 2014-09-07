@@ -145,8 +145,22 @@ module Highlighter
   # ==============
 
   class VideoAsset
+    attr_accessor :file_path, :asset, :clips
     
-    attr_accessor 
+    def initialize(file_path, asset)
+    end
+    
+    def add_clips(clips)
+      @clips += Array clips
+    end
+    
+    def deduped_clips
+      
+    end
+    
+    def normalize_time
+    end
+    
   end
   
   # =======================
@@ -161,15 +175,33 @@ module Highlighter
       @video_directory = video_directory
     end
     
-    def get_video_files
+    def get_video_assets
+      # somehow get the files from the directory in variable files in time order
+      files.map_with_index{|f,i|  VideoAsset.new(f, @assets[i])}
     end
+        
+    
+  end
+  
+  # ================
+  # = XMLConverter =
+  # ================
+  
+  class XMLConverter
+    
+    # remember to use deduped clips from VideoAsset
     
     
   end
   
+  module SampleSetUtilities
+    
+    def merge(ss1, ss2)
+    end
+    
+  end
+  
 end
-
-
 
 include Highlighter
 input_file_name = '/Users/kon/GitHub/VideoHighlighter/data/input/solo.csv'
@@ -181,13 +213,12 @@ Importer.new(SoloShotSensor, input_file_name, ss).import
 puts "1"
 assets = ss.split_on_recording
 
-<<<<<<< HEAD
-object = assets.map {|a| {video_asset: a, clips: a.jumps}}
 
-XmlConverter.convert(object)
+video_assets = VideoFileAssociater.new(assets, "path/to/video_dir").get_video_assets
 
-assets.each{|a| puts a.samples.length}
-=======
+# add the clips
+va_w_clips = video_assets.map{|va| va.add_clips(va.asset.split_on_woo_jumps)}
+
 # find the longest recording
 longest_length = assets.first.samples.length
 longest_footage = assets.first
@@ -203,7 +234,62 @@ assets.each{|a|
 }
 
 
->>>>>>> FETCH_HEAD
+# find the longest recording
+longest_length = assets.first.samples.length
+longest_footage = assets.first
+
+assets.each{|a| 
+  puts "length: ", a.num_samples
+  puts "duration: ",a.duration
+  if a.samples.length > longest_length 
+    longest_length = a.samples.length
+    longest_footage = a
+  end
+
+}
+
+
+
+object = assets.map {|a| {video_asset: a, clips: a.jumps}}
+
+
+assets.each{|a| puts a.samples.length}
+
+
+# find the longest recording
+longest_length = assets.first.samples.length
+longest_footage = assets.first
+
+assets.each{|a| 
+  puts "length: ", a.num_samples
+  puts "duration: ",a.duration
+  if a.samples.length > longest_length 
+    longest_length = a.samples.length
+    longest_footage = a
+  end
+
+}
+
+
+
+
+# find the longest recording
+longest_length = assets.first.samples.length
+longest_footage = assets.first
+
+assets.each{|a| 
+  puts "length: ", a.num_samples
+  puts "duration: ",a.duration
+  if a.samples.length > longest_length 
+    longest_length = a.samples.length
+    longest_footage = a
+  end
+
+}
+
+
+
+
 kon_footage = assets.last.tagged(100)
 puts "2"
 puts kon_footage
