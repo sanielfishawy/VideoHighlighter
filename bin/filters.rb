@@ -38,6 +38,15 @@ module Filters
       result
     end
     
+    def local_maxima(key, minimum_amplitude, window=10)
+      # provide an array of samples that are local maxima
+      result.sort{|a,b| a[key] <=> b[key]}
+    end
+    
+    def split_and_pad_on_samples(samples, padding={before:5, after:5})
+      # provid an array of samplesets from @samples where each is centered on a sample in samples and padded by before and after.
+    end
+    
     def print_data
       @samples.each{|s| puts s.data.inspect}
     end
@@ -49,13 +58,18 @@ module Filters
   module SoloShotFilters
     include CommonFilters
 
-    def split_on_recording
+    def solo_split_on_recording
       split_on(Highlighter::SoloShotSensor, :recording, 1)
     end
     
-    def tagged(tagID)
+
+    def solo_tagged(tag)
       # Exercise for the reader make a where_including_other_sensors and use that instead.
-      where(:tag, tagID)
+      where(:tag, tag)
+    end
+    
+    def solo_jumps()
+      split_and_pad_on_samples(local_maxima(:altitude, 5))
     end
   end
   
