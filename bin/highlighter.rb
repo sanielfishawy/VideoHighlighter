@@ -126,12 +126,46 @@ module Highlighter
     end
   end
   
+  # ==============
+  # = VideoAsset =
+  # ==============
+
+  class VideoAsset
+    
+    attr_accessor 
+  end
+  
+  # =======================
+  # = VideoFileAssociater =
+  # =======================
+  
+  class VideoFileAssociater
+    attr_accessor :video_directory, :assets, :video_file
+    
+    def initialize(assets, video_directory)
+      @assets = assets
+      @video_directory = video_directory
+    end
+    
+    def get_video_files
+    end
+    
+    
+  end
+  
 end
+
+
 
 include Highlighter
 ss = SampleSet.new([SoloShotSensor, WooSensor]);
 Importer.new(SoloShotSensor, "../data/input/solo.csv", ss).import
 assets = ss.split_on_recording
+
+object = assets.map {|a| {video_asset: a, clips: a.jumps}}
+
+XmlConverter.convert(object)
+
 assets.each{|a| puts a.samples.length}
 kon_footage = assets.last.tagged(100)
 puts kon_footage.samples.length
