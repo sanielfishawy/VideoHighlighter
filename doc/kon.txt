@@ -4,10 +4,8 @@ rvm
 - Kon homework
   - Create a method that gives duration for a sampleset
   - Create a method that gives the bounds for a sampleset
-<<<<<<< HEAD
-=======
   - Create a method that gives the num_samples of a sampleset
->>>>>>> FETCH_HEAD
+  - Create a method that gives the num_samples of a sampleset
   - Create a method all all the people tagged in a sampleset and the number of samples they each have.
   - Create a method that splits a sampleset on jumps into multiple sample sets
     - Find local maxima
@@ -22,11 +20,9 @@ rvm
 	  assets = ss.split_on_recording
 	  kon_footage = assets.last.tagged(kon)
 	  kon_woo_jumps = kon_footage.woo_jumps
-<<<<<<< HEAD
 	  xml = XmlExporter.new(kon_footage, kon_woo_jumps)
 	  
 DONE
   - Create a method that gives the length of a sampleset
 =======
 	  xml = XmlExporter.export(kon_footage, kon_woo_jumps)
->>>>>>> FETCH_HEAD
