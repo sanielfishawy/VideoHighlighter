@@ -53,9 +53,9 @@ module Filters
       split_on(Highlighter::SoloShotSensor, :recording, 1)
     end
     
-    def tagged(tag)
+    def tagged(tagID)
       # Exercise for the reader make a where_including_other_sensors and use that instead.
-      where(:tag, 100)
+      where(:tag, tagID)
     end
   end
   
