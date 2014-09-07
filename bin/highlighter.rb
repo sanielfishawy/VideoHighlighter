@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 puts "#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}"
 
+
 module Highlighter
   
   require_relative './filters'
@@ -87,8 +88,21 @@ module Highlighter
     
     def add_samples(sample)
       @samples += Array sample
-      @samples.sort!{|a,b| a.time_stamp <=> b.time_stamp}
+# assume they are in time_stamp order
+#     @samples.sort!{|a,b| a.time_stamp <=> b.time_stamp}
       self
+    end
+    
+    def num_samples()
+      @samples.length
+    end
+    
+    def duration()
+      @samples.last.time_stamp - @samples.first.time_stamp
+    end
+    
+    def get_FCP_XML()
+      printf('Start %d; Duration %d', @samples.first.time_stamp, self.duration )
     end
     
   end
@@ -158,16 +172,45 @@ end
 
 
 include Highlighter
+input_file_name = '/Users/kon/GitHub/VideoHighlighter/data/input/solo.csv'
 ss = SampleSet.new([SoloShotSensor, WooSensor]);
-Importer.new(SoloShotSensor, "../data/input/solo.csv", ss).import
+#Importer.new(SoloShotSensor, "../data/input/solo.csv", ss).import
+puts input_file_name
+Importer.new(SoloShotSensor, input_file_name, ss).import
+
+puts "1"
 assets = ss.split_on_recording
 
+<<<<<<< HEAD
 object = assets.map {|a| {video_asset: a, clips: a.jumps}}
 
 XmlConverter.convert(object)
 
 assets.each{|a| puts a.samples.length}
+=======
+# find the longest recording
+longest_length = assets.first.samples.length
+longest_footage = assets.first
+
+assets.each{|a| 
+  puts "length: ", a.num_samples
+  puts "duration: ",a.duration
+  if a.samples.length > longest_length 
+    longest_length = a.samples.length
+    longest_footage = a
+  end
+
+}
+
+
+>>>>>>> FETCH_HEAD
 kon_footage = assets.last.tagged(100)
+puts "2"
+puts kon_footage
 puts kon_footage.samples.length
+puts "Duration in sensor time: "
+puts kon_footage.duration
+puts "FCP XML"
+puts longest_footage.get_FCP_XML
 
 
