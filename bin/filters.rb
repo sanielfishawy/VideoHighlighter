@@ -38,9 +38,11 @@ module Filters
       result
     end
     
+    
     def local_maxima(key, minimum_amplitude, window=10)
       # provide an array of samples that are local maxima
-      result.sort{|a,b| a[key] <=> b[key]}
+      result = @samples
+      result.sort{|a,b| a.data[key] <=> b.data[key]}
     end
     
     def split_and_pad_on_samples(samples, padding={before:5, after:5})
@@ -62,6 +64,10 @@ module Filters
       split_on(Highlighter::SoloShotSensor, :recording, 1)
     end
     
+    def solo_sort_on_key(key)
+      puts "In solo_sort"
+      @samples.sort{|a,b| a.data[key] <=> b.data[key]}
+    end
 
     def solo_tagged(tag)
       # Exercise for the reader make a where_including_other_sensors and use that instead.
@@ -70,6 +76,13 @@ module Filters
     
     def solo_jumps()
       split_and_pad_on_samples(local_maxima(:altitude, 5))
+    end
+    
+    def solo_accel_highlight( video_asset )
+      my_clip = [3,5]
+      video_asset.add_clips( my_clip )
+      my_clip = [100,5]
+      video_asset.add_clips( my_clip )
     end
   end
   

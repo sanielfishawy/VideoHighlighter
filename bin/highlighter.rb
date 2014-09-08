@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 puts "#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}"
 
-
 module Highlighter
   
   require_relative './filters'
@@ -9,6 +8,17 @@ module Highlighter
   
   require "csv"
   
+  # ===========
+  # = Clip =
+  # ===========
+  class Clip
+    @parameters = [:time, :duration]
+    
+    def self.parameters
+      @parameters
+    end
+  end
+
   # ===========
   # = Sensors =
   # ===========
@@ -145,9 +155,16 @@ module Highlighter
   # ==============
 
   class VideoAsset
-    attr_accessor :file_path, :asset, :clips
+    attr_accessor :file_path, :sample_set, :clips
     
-    def initialize(file_path, asset)
+    def initialize(file_path, sample_set)
+      @file = file_path
+      @sample_set = sample_set
+      @clips = []
+    end
+    
+    def get_sample_set
+      return @sample_set
     end
     
     def add_clips(clips)
@@ -161,6 +178,15 @@ module Highlighter
     def normalize_time
     end
     
+    def display
+      printf("Video Asset: File %s, Duration %d\n", @file, @sample_set.duration/1000)
+    end
+
+    def get_clip_XML
+      @clips.each{|clip|
+      printf("Video Asset: File %s, Start %d, Duration %d\n", @file, clip.start, clip.duration/1000)
+      }
+    end
   end
   
   # =======================
@@ -177,7 +203,11 @@ module Highlighter
     
     def get_video_assets
       # somehow get the files from the directory in variable files in time order
-      files.map_with_index{|f,i|  VideoAsset.new(f, @assets[i])}
+#      files = dir (.MP4)
+      Dir.chdir( @video_directory )
+      files = Dir.glob('*.MP4')
+      files.map!{|f| @video_directory + f}
+      files.map.with_index{|f,i|  VideoAsset.new(f, @assets[i])}
     end
         
     
@@ -204,99 +234,68 @@ module Highlighter
 end
 
 include Highlighter
-input_file_name = '/Users/kon/GitHub/VideoHighlighter/data/input/solo.csv'
+input_file_name = '/Users/kon/GitHub/VideoHighlighter/Video/VG30_083014.csv'
+input_file_name = '/Users/kon/GitHub/VideoHighlighter/Video/SSDATA.csv'
 ss = SampleSet.new([SoloShotSensor, WooSensor]);
 #Importer.new(SoloShotSensor, "../data/input/solo.csv", ss).import
 puts input_file_name
 Importer.new(SoloShotSensor, input_file_name, ss).import
 
-puts "1"
-assets = ss.split_on_recording
+assets = ss.solo_split_on_recording
+
+# find the longest recording
+longest_length = assets.first.samples.length
+longest_footage = assets.first
+
+assets.each{|a| 
+  if a.samples.length > longest_length 
+    longest_length = a.samples.length
+    longest_footage = a
+  end
+
+}
+
+puts "============="
+printf("Number of Video files: %d\n",  assets.count)
+
+#
+# Match with Video file
+#
+video_file_path = '/Users/kon/GitHub/VideoHighlighter/Video/'
 
 
-video_assets = VideoFileAssociater.new(assets, "path/to/video_dir").get_video_assets
+puts "Call VideoFileAssociater: "
+video_assets = VideoFileAssociater.new(assets, video_file_path).get_video_assets
 
+puts "Video Assets: "
+video_assets.each{|va| va.display }
+puts "==============="
+
+#
+# Sort it
+#sorted_accel = 0xxxxxx
+video_assets.each{|va| va.get_sample_set.solo_accel_highlight(va)}
+#video_assets.each{|va| va.get_sample_set.solo_sort_on_key(:accel)}
+
+puts va.get_clip_XML
+
+#sorted_array = video_assets.each{|va| va.get_sample_set.solo_sort_on_key(:accel)}
+
+time_start = 0
+highlight_count = 5
 # add the clips
-va_w_clips = video_assets.map{|va| va.add_clips(va.asset.split_on_woo_jumps)}
-
-# find the longest recording
-longest_length = assets.first.samples.length
-longest_footage = assets.first
-
-assets.each{|a| 
-  puts "length: ", a.num_samples
-  puts "duration: ",a.duration
-  if a.samples.length > longest_length 
-    longest_length = a.samples.length
-    longest_footage = a
-  end
-
-}
 
 
-# find the longest recording
-longest_length = assets.first.samples.length
-longest_footage = assets.first
+#object = assets.map {|a| {video_asset: a, clips: a.jumps}}
 
-assets.each{|a| 
-  puts "length: ", a.num_samples
-  puts "duration: ",a.duration
-  if a.samples.length > longest_length 
-    longest_length = a.samples.length
-    longest_footage = a
-  end
-
-}
+#assets.each{|a| puts a.samples.length}
 
 
-
-object = assets.map {|a| {video_asset: a, clips: a.jumps}}
-
-
-assets.each{|a| puts a.samples.length}
-
-
-# find the longest recording
-longest_length = assets.first.samples.length
-longest_footage = assets.first
-
-assets.each{|a| 
-  puts "length: ", a.num_samples
-  puts "duration: ",a.duration
-  if a.samples.length > longest_length 
-    longest_length = a.samples.length
-    longest_footage = a
-  end
-
-}
-
-
-
-
-# find the longest recording
-longest_length = assets.first.samples.length
-longest_footage = assets.first
-
-assets.each{|a| 
-  puts "length: ", a.num_samples
-  puts "duration: ",a.duration
-  if a.samples.length > longest_length 
-    longest_length = a.samples.length
-    longest_footage = a
-  end
-
-}
-
-
-
-
-kon_footage = assets.last.tagged(100)
-puts "2"
+kon_footage = longest_footage
 puts kon_footage
 puts kon_footage.samples.length
-puts "Duration in sensor time: "
-puts kon_footage.duration
+puts "Duration in seconds: "
+puts kon_footage.duration/1000
 puts "FCP XML"
 puts longest_footage.get_FCP_XML
-
 
