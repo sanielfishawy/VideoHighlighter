@@ -80,11 +80,21 @@ module Filters
       split_and_pad_on_samples(local_maxima(:altitude, 5))
     end
     
-    def solo_accel_highlight( video_asset )
-      my_clip = [3,5]
-      video_asset.add_clips( my_clip )
-      my_clip = [100,5]
-      video_asset.add_clips( my_clip )
+    def solo_accel_highlight( num_highlights )
+      acceleration = sort_on_key(Highlighter::SoloShotSensor, :accel )
+      puts "===========PUTS Acceleration======="
+      puts acceleration
+      puts num_highlights
+      puts "===========DONE PUTS======="
+      acceleration.take(num_highlights){|alt| 
+        puts "Inside Take"
+        puts alt
+      }
+ 
+ 
+ #     my_clip = [3,5]
+ #     video_asset.add_clips( my_clip )
+#      my_clip = [100,5]
     end
   end
   

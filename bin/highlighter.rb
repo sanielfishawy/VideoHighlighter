@@ -8,16 +8,6 @@ module Highlighter
   
   require "csv"
   
-  # ===========
-  # = Clip =
-  # ===========
-  class Clip
-    @parameters = [:time, :duration]
-    
-    def self.parameters
-      @parameters
-    end
-  end
 
   # ===========
   # = Sensors =
@@ -184,7 +174,7 @@ module Highlighter
 
     def get_clip_XML
       @clips.each{|clip|
-      printf("Video Asset: File %s, Start %d, Duration %d\n", @file, clip.start, clip.duration/1000)
+      printf("Video Asset: File %s, Start %d, Duration %d\n", @file, clip.first.time_stamp - @sample_set.first.time_stamp, clip.duration/1000)
       }
     end
   end
@@ -275,7 +265,16 @@ puts "==============="
 #
 # Sort it
 #sorted_accel = 0xxxxxx
-video_assets.each{|va| va.get_sample_set.solo_accel_highlight(va)}
+num_highlights = 2
+video_assets.each{|va| my_clips = va.get_sample_set.solo_accel_highlight(num_highlights)
+  puts "=======MY_CLIPS========="
+  puts my_clips
+  va.add_clips(my_clips)
+}
+puts "===MY CLIPS END===="
+
+video_assets.each{|va| va.get_clip_XML}
+
 #video_assets.each{|va| va.get_sample_set.solo_sort_on_key(:accel)}
 
 #puts va.get_clip_XML
