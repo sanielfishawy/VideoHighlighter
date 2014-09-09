@@ -38,6 +38,12 @@ module Filters
       result
     end
     
+    def sort_on_key(sensor, key)
+      puts "In sort on key"
+      #returns an array of samples
+      @samples.select{|s| s.sensor == sensor }.sort{|a,b| a.data[key] <=> b.data[key]}
+    end
+    
     
     def local_maxima(key, minimum_amplitude, window=10)
       # provide an array of samples that are local maxima
@@ -64,10 +70,6 @@ module Filters
       split_on(Highlighter::SoloShotSensor, :recording, 1)
     end
     
-    def solo_sort_on_key(key)
-      puts "In solo_sort"
-      @samples.sort{|a,b| a.data[key] <=> b.data[key]}
-    end
 
     def solo_tagged(tag)
       # Exercise for the reader make a where_including_other_sensors and use that instead.

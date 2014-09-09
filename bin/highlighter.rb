@@ -236,6 +236,7 @@ end
 include Highlighter
 input_file_name = '/Users/kon/GitHub/VideoHighlighter/Video/VG30_083014.csv'
 input_file_name = '/Users/kon/GitHub/VideoHighlighter/Video/SSDATA.csv'
+input_file_name = '/Users/kon/GitHub/VideoHighlighter/data/input/solo.csv'
 ss = SampleSet.new([SoloShotSensor, WooSensor]);
 #Importer.new(SoloShotSensor, "../data/input/solo.csv", ss).import
 puts input_file_name
@@ -277,7 +278,7 @@ puts "==============="
 video_assets.each{|va| va.get_sample_set.solo_accel_highlight(va)}
 #video_assets.each{|va| va.get_sample_set.solo_sort_on_key(:accel)}
 
-puts va.get_clip_XML
+#puts va.get_clip_XML
 
 #sorted_array = video_assets.each{|va| va.get_sample_set.solo_sort_on_key(:accel)}
 
